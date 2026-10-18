@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ServiceRequest;
+use App\Models\PortalNotification;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -51,6 +53,20 @@ class CitizenRequestController extends Controller
             'status' => 'Pending',
         ]);
 
+        PortalNotification::create([
+            'user_id' => $request->user()->id,
+            'service_request_id' => $serviceRequest->id,
+            'title' => 'Request received',
+            'message' => "Your {$serviceRequest->category} request {$serviceRequest->reference} was received and is pending review.",
+        ]);
+
+        User::where('is_admin', true)->get()->each(fn (User $admin) => PortalNotification::create([
+            'user_id' => $admin->id,
+            'service_request_id' => $serviceRequest->id,
+            'title' => 'New service request',
+            'message' => "{$request->user()->name} submitted a {$serviceRequest->category} request ({$serviceRequest->reference}) in {$serviceRequest->county} County.",
+        ]));
+
         return to_route('citizen.requests.index')->with('success', "Request {$serviceRequest->reference} was submitted.");
     }
 
@@ -61,20 +77,4 @@ class CitizenRequestController extends Controller
         ]);
     }
 
-    public function notifications(Request $request): Response
-    {
-        $items = ServiceRequest::where('user_id', $request->user()->id)->latest('updated_at')->get();
-
-        return Inertia::render('citizen/notifications', [
-            'notifications' => $items->map(fn (ServiceRequest $item) => [
-                'id' => $item->id,
-                'reference' => $item->reference,
-                'category' => $item->category,
-                'status' => $item->status,
-                'note' => $item->status_note,
-                'created_at' => $item->created_at->toIso8601String(),
-                'updated_at' => $item->updated_at->toIso8601String(),
-            ]),
-        ]);
-    }
 }

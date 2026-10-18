@@ -5,7 +5,7 @@ import { useState } from 'react';
 type Props = { title: string; backHref?: string; backLabel?: string; children: React.ReactNode };
 
 export default function PortalLayout({ title, backHref, backLabel = 'Back to dashboard', children }: Props) {
-    const { auth } = usePage<{ auth: { user: { name: string } | null } }>().props;
+    const { auth, unreadNotifications } = usePage<{ auth: { user: { name: string; is_admin?: boolean } | null }; unreadNotifications: number }>().props;
     const [mobileOpen, setMobileOpen] = useState(false);
     const name = auth.user?.name ?? 'Citizen';
     const initials = name.split(/\s+/).map((part) => part[0]).slice(0, 2).join('').toUpperCase();
@@ -28,7 +28,8 @@ export default function PortalLayout({ title, backHref, backLabel = 'Back to das
                         <Link className="inline-flex items-center gap-2 px-1 py-2 text-xs font-semibold text-[#526158] no-underline hover:text-[#006b3f]" href="/citizen"><Home size={16} />Home</Link>
                         <Link className="inline-flex items-center gap-2 px-1 py-2 text-xs font-semibold text-[#526158] no-underline hover:text-[#006b3f]" href="/citizen/requests/create"><FilePlus2 size={16} />Submit a request</Link>
                         <Link className="inline-flex items-center gap-2 px-1 py-2 text-xs font-semibold text-[#526158] no-underline hover:text-[#006b3f]" href="/citizen/requests"><FileText size={16} />My requests</Link>
-                        <Link className="inline-flex items-center gap-2 px-1 py-2 text-xs font-semibold text-[#526158] no-underline hover:text-[#006b3f]" href="/citizen/notifications"><Bell size={16} />Notifications</Link>
+                        <Link className="inline-flex items-center gap-2 px-1 py-2 text-xs font-semibold text-[#526158] no-underline hover:text-[#006b3f]" href="/citizen/notifications"><span className="relative"><Bell size={16} />{unreadNotifications > 0 && <span className="absolute -top-2 -right-2 grid min-h-4 min-w-4 place-items-center rounded-full bg-[#b42332] px-1 text-[9px] font-bold leading-none text-white" aria-label={`${unreadNotifications} unread notifications`}>{unreadNotifications > 99 ? '99+' : unreadNotifications}</span>}</span>Notifications</Link>
+                        {auth.user?.is_admin && <Link className="inline-flex items-center gap-2 px-1 py-2 text-xs font-semibold text-[#526158] no-underline hover:text-[#006b3f]" href="/admin">Admin</Link>}
                     </nav>
                     <div className="ml-1 flex items-center gap-2 whitespace-nowrap text-xs font-semibold"><span className="grid size-9 place-items-center rounded-full bg-[#e6f2ea] text-[11px] font-bold text-[#064e32]">{initials}</span><span className="hidden md:inline">{name}</span></div>
                 </div>
