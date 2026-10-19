@@ -46,16 +46,26 @@ class AdminController extends Controller
         });
 
         return Inertia::render('admin/requests/index', [
-            'requests' => $query->paginate(12)->withQueryString(),
+            'requests' => $query->paginate(12)->withQueryString()->through(function (ServiceRequest $item) {
+                if ($item->sub_county) {
+                    $item->setAttribute('location', $item->sub_county.', '.$item->location);
+                }
+
+                return $item;
+            }),
             'filters' => $filters,
             'categories' => ServiceRequest::query()->select('category')->distinct()->orderBy('category')->pluck('category'),
             'counties' => ServiceRequest::query()->select('county')->distinct()->orderBy('county')->pluck('county'),
         ]);
     }
 
-    public function show(ServiceRequest $serviceRequest): Response
+    public function show(int $serviceRequest): Response
     {
+        $serviceRequest = ServiceRequest::query()->findOrFail($serviceRequest);
         $serviceRequest->load('user');
+        if ($serviceRequest->sub_county) {
+            $serviceRequest->setAttribute('location', $serviceRequest->sub_county.', '.$serviceRequest->location);
+        }
 
         return Inertia::render('admin/requests/show', [
             'serviceRequest' => [

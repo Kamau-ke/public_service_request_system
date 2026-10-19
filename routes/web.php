@@ -17,6 +17,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/citizen/requests', [CitizenRequestController::class, 'index'])->name('citizen.requests.index');
     Route::get('/citizen/requests/create', [CitizenRequestController::class, 'create'])->name('citizen.requests.create');
     Route::post('/citizen/requests', [CitizenRequestController::class, 'store'])->name('citizen.requests.store');
+    Route::get('/citizen/requests/{serviceRequest}', [CitizenRequestController::class, 'show'])->name('citizen.requests.show');
     Route::get('/citizen/notifications', [PortalNotificationController::class, 'citizenIndex'])->name('citizen.notifications');
     Route::patch('/citizen/notifications/read-all', [PortalNotificationController::class, 'markAllRead'])->name('citizen.notifications.read-all');
     Route::patch('/citizen/notifications/{portalNotification}/read', [PortalNotificationController::class, 'markRead'])->name('citizen.notifications.read');

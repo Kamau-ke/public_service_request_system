@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ServiceRequest extends Model
 {
     protected $fillable = [
-        'user_id', 'reference', 'category', 'county', 'location',
+        'user_id', 'reference', 'category', 'county', 'sub_county', 'location',
         'description', 'image_path', 'status', 'status_note',
     ];
 

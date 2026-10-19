@@ -1,15 +1,17 @@
 import { Form } from '@inertiajs/react';
 import { ImagePlus, Send } from 'lucide-react';
+import { useState } from 'react';
 import InputError from '@/components/input-error';
 import PortalLayout from '@/components/citizen/portal-layout';
 
 const categories = ['Streetlight', 'Water supply', 'Garbage collection', 'Road damage', 'Other'];
-const counties = ['Nairobi', 'Mombasa', 'Kiambu', 'Nakuru', 'Kisumu', 'Uasin Gishu', 'Other'];
 const label = 'mb-1.5 block text-[13px] font-semibold text-[#26372d]';
 const field = 'w-full rounded-lg border border-[#d6e0d8] bg-white px-3 py-2.5 text-[13px] text-[#18231d] outline-none focus:border-[#006b3f] focus:ring-2 focus:ring-[#006b3f]/15';
 const hint = 'mt-1.5 text-[11px] leading-relaxed text-[#66736c]';
 
-export default function SubmitRequest() {
+export default function SubmitRequest({ countyLocations }: { countyLocations: Record<string, string[]> }) {
+    const [selectedCounty, setSelectedCounty] = useState('');
+    const [selectedSubCounty, setSelectedSubCounty] = useState('');
     return (
         <PortalLayout title="Submit a request">
             <div className="mb-5 flex items-end justify-between gap-4"><div><h1 className="m-0 text-[clamp(24px,3vw,30px)] font-bold tracking-tight text-[#17251d]">Submit a service request</h1><p className="mt-2 text-sm text-[#66736c]">Tell us what needs attention. Your report will be sent to the right response team.</p></div></div>
@@ -17,8 +19,9 @@ export default function SubmitRequest() {
                 {({ errors, processing }) => <>
                     <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
                         <div><label className={label} htmlFor="category">Service category <span className="text-[#bb1e2d]">*</span></label><select className={field} id="category" name="category" required defaultValue=""><option value="" disabled>Select a category</option>{categories.map((item) => <option key={item}>{item}</option>)}</select><InputError message={errors.category} className="mt-1.5 text-[11px] text-red-700" /></div>
-                        <div><label className={label} htmlFor="county">County <span className="text-[#bb1e2d]">*</span></label><select className={field} id="county" name="county" required defaultValue=""><option value="" disabled>Select your county</option>{counties.map((item) => <option key={item}>{item}</option>)}</select><InputError message={errors.county} className="mt-1.5 text-[11px] text-red-700" /></div>
-                        <div className="sm:col-span-2"><label className={label} htmlFor="location">Specific location <span className="text-[#bb1e2d]">*</span></label><input className={field} id="location" name="location" required maxLength={255} placeholder="Street, estate, landmark or nearest building" /><div className={hint}>A nearby landmark helps the response team find the issue.</div><InputError message={errors.location} className="mt-1.5 text-[11px] text-red-700" /></div>
+                        <div><label className={label} htmlFor="county">County <span className="text-[#bb1e2d]">*</span></label><select className={field} id="county" name="county" required value={selectedCounty} onChange={(event) => { setSelectedCounty(event.target.value); setSelectedSubCounty(''); }}><option value="" disabled>Select your county</option>{Object.keys(countyLocations).map((item) => <option key={item} value={item}>{item}</option>)}</select><InputError message={errors.county} className="mt-1.5 text-[11px] text-red-700" /></div>
+                        <div><label className={label} htmlFor="sub_county">Sub-county / constituency <span className="text-[#bb1e2d]">*</span></label><select className={field} id="sub_county" name="sub_county" required disabled={!selectedCounty} value={selectedSubCounty} onChange={(event) => setSelectedSubCounty(event.target.value)}><option value="" disabled>{selectedCounty ? 'Select your sub-county' : 'Select a county first'}</option>{(countyLocations[selectedCounty] ?? []).map((item) => <option key={item} value={item}>{item}</option>)}</select><InputError message={errors.sub_county} className="mt-1.5 text-[11px] text-red-700" /></div>
+                        <div className="sm:col-span-2"><label className={label} htmlFor="location">Specific location <span className="text-[#bb1e2d]">*</span></label><input className={field} id="location" name="location" required maxLength={255} placeholder="Ward, estate, village, street or landmark" /><div className={hint}>Add a ward, estate, village, street or nearby landmark to help the response team find the issue.</div><InputError message={errors.location} className="mt-1.5 text-[11px] text-red-700" /></div>
                         <div className="sm:col-span-2"><label className={label} htmlFor="description">Describe the issue <span className="text-[#bb1e2d]">*</span></label><textarea className={`${field} min-h-28 resize-y`} id="description" name="description" required maxLength={5000} placeholder="What happened, and when did you first notice it?" /><div className={hint}>Include useful details. Please do not include sensitive personal information.</div><InputError message={errors.description} className="mt-1.5 text-[11px] text-red-700" /></div>
                         <div className="sm:col-span-2"><label className={label} htmlFor="image">Photo evidence <span className="font-normal text-[#77847c]">(optional)</span></label><div className="flex items-center gap-3 rounded-lg border border-dashed border-[#b7c8bc] bg-[#fbfdfb] p-4"><span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#e9f4ec] text-[#006b3f]"><ImagePlus size={18} /></span><div className="min-w-0"><input className="max-w-full text-xs text-[#526158] file:mr-3 file:rounded-md file:border-0 file:bg-[#e9f4ec] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[#006b3f]" id="image" type="file" name="image" accept="image/jpeg,image/png,image/webp" /><div className={hint}>Attach a clear photo · JPG, PNG or WebP, up to 10 MB</div></div></div><InputError message={errors.image} className="mt-1.5 text-[11px] text-red-700" /></div>
                     </div>
