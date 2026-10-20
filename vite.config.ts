@@ -1,6 +1,5 @@
 import inertia from '@inertiajs/vite';
 import babel from '@rolldown/plugin-babel';
-import tailwindcss from '@tailwindcss/vite';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import laravel from 'laravel-vite-plugin';
 import { bunny } from 'laravel-vite-plugin/fonts';
@@ -22,7 +21,6 @@ export default defineConfig({
         babel({
             presets: [reactCompilerPreset()],
         }),
-        tailwindcss(),
     ]),
     server: {
         watch: {
@@ -41,7 +39,6 @@ export default defineConfig({
             'node_modules/**',
             'public/**',
             'bootstrap/ssr/**',
-            'tailwind.config.js',
             'resources/js/actions/**',
             'resources/js/components/ui/*',
             'resources/js/routes/**',
@@ -65,9 +62,5 @@ export default defineConfig({
             'resources/js/components/ui/*',
             'resources/views/mail/*',
         ],
-        sortTailwindcss: {
-            functions: ['clsx', 'cn', 'cva'],
-            stylesheet: 'resources/css/app.css',
-        },
     },
 });

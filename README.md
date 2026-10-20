@@ -18,7 +18,7 @@ Sauti Yako is a public service request portal for reporting and tracking local i
 
 - Laravel 13 and PHP 8.3+
 - React 19, TypeScript, Inertia.js, and Vite+
-- Tailwind CSS 4
+- Plain CSS in `resources/css/app.css`, bundled with Vite
 - Aiven MySQL for the shared deployment database; local development can use SQLite
 
 ## Requirements
