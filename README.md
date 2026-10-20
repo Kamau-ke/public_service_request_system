@@ -113,7 +113,7 @@ Run `php artisan test` to execute the Laravel test suite.
 
 ## Deploy to Vercel
 
-The project includes a PHP function entrypoint and Vercel routing configuration. Vercel uses the community `vercel-php` runtime for PHP applications; the runtime runs the Composer `vercel` script to build the Vite assets. The function entrypoint puts Laravel's writable runtime files in `/tmp`.
+The project includes a PHP function entrypoint and Vercel routing configuration. Vercel uses the community `vercel-php` runtime for PHP applications; the runtime runs the Composer `vercel` script to build the Vite assets. The Vercel config disables frontend framework auto-detection because Wayfinder needs PHP during the asset build. The function entrypoint puts Laravel's writable runtime files in `/tmp`.
 
 1. Push the project to a Git provider supported by Vercel and import it as a Vercel project.
 2. Add these environment variables in **Project Settings → Environment Variables**. Set appropriate Preview and Production scopes, and keep secrets out of Git.
