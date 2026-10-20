@@ -7,6 +7,10 @@ import { bunny } from 'laravel-vite-plugin/fonts';
 import { defineConfig, lazyPlugins } from 'vite-plus';
 
 export default defineConfig({
+    // Serve compiled assets from this deployment's own origin on Vercel.
+    // This prevents an ASSET_URL configured for Vercel's dashboard from being
+    // baked into JavaScript chunk and font URLs during the production build.
+    base: '/',
     plugins: lazyPlugins(() => [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
