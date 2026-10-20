@@ -9,6 +9,7 @@ use App\Http\Controllers\PortalNotificationController;
 Route::inertia('/', 'citizen/welcome')->name('home');
 
 Route::middleware(['auth'])->group(function () {
+    // Fortify sends authenticated users here so each role reaches its own portal.
     Route::get('/dashboard', function (Request $request) {
         return to_route($request->user()->isAdmin() ? 'admin.dashboard' : 'citizen.home');
     })->name('dashboard');

@@ -49,6 +49,10 @@
             "npm install",
             "npm run build"
         ],
+        "vercel": [
+            "npm install --no-audit --no-fund",
+            "npm run build"
+        ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
             "@php artisan dev"

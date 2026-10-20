@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+// check whether the signed in user is admin
 class EnsureAdmin
 {
     public function handle(Request $request, Closure $next): Response

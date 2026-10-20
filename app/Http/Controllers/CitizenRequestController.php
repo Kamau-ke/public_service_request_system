@@ -86,6 +86,7 @@ class CitizenRequestController extends Controller
 
     public function show(Request $request, int $serviceRequest): Response
     {
+        // Scope the lookup to the signed-in citizen to prevent cross-account access.
         $item = ServiceRequest::query()
             ->where('user_id', $request->user()->id)
             ->findOrFail($serviceRequest);

@@ -98,6 +98,7 @@ class AdminController extends Controller
         return back()->with('success', "{$serviceRequest->reference} was updated.");
     }
 
+    // Get and filter citizens
     public function citizens(Request $request): Response
     {
         $filters = $request->validate(['search' => ['nullable', 'string', 'max:150']]);
