@@ -1,4 +1,5 @@
 import inertia from '@inertiajs/vite';
+import tailwindcss from '@tailwindcss/vite';
 import babel from '@rolldown/plugin-babel';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import laravel from 'laravel-vite-plugin';
@@ -16,6 +17,7 @@ export default defineConfig({
                 }),
             ],
         }),
+        tailwindcss(),
         inertia(),
         react(),
         babel({
