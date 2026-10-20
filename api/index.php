@@ -1,4 +1,7 @@
 <?php
+$_SERVER['HTTPS'] = 'on';
+$_SERVER['SERVER_PORT'] = 443;
+$_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
 
 // Vercel's function filesystem is read-only except for the temporary directory.
 if (getenv('VERCEL') === '1') {
